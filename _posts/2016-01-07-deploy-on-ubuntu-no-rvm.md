@@ -8,32 +8,31 @@ tags: []
 {% include JB/setup %}
 
 # Deploy Rails on Ubuntu
+原文<https://ihower.hackpad.com/Deploy-Rails-on-Ubuntu-j8zYjjMpHth#:h=設定-Deploy-使用者>
 
-		更新系統套件
+## 更新系統套件
 sudo apt-get update
 sudo apt-get upgrade -y
 sudo dpkg-reconfigure tzdata
-		（進入選單選你的Time zone=>Asia=>Taipei）
-		apt-get 就像是homebrew一樣，是一個套件管理工具
+		（選Time zone=>Asia=>Taipei）
 
-		安裝編譯套件 
+## 安裝編譯套件 
 sudo apt-get install -y build-essential git-core bison openssl libreadline6-dev curl zlib1g zlib1g-dev libssl-dev libyaml-dev libsqlite3-0 libsqlite3-dev sqlite3  autoconf libc6-dev libpcre3-dev curl libcurl4-nss-dev libxml2-dev libxslt-dev imagemagick nodejs libffi-dev
 		（沒錯，就是copy上面一整串去執行）
 
-		安裝 Ruby
+## 安裝 Ruby
 
-wget http://cache.ruby-lang.org/pub/ruby/2.2/ruby-2.2.2.tar.gz
-tar xvfz ruby-2.2.2.tar.gz
-		解壓縮
-cd ruby-2.2.2
-./configure
-		在centos下安裝失敗時，改用 ./configure --prefix=/usr 指定路徑
-make
-sudo make install
+### 1.下載源碼編譯
+    wget http://cache.ruby-lang.org/pub/ruby/2.2/ruby-2.2.2.tar.gz
+    tar xvfz ruby-2.2.2.tar.gz
+    cd ruby-2.2.2
+    ./configure
+    (在centos下安裝失敗時，改用 ./configure --prefix=/usr 指定路徑)
+    make
+    sudo make install
 
-		編譯耗時，請耐心等候
 
-		另一種安裝 Ruby 的方式 (比較快)
+### 2.brightbox(比較快)
 
 使用 https://www.brightbox.com/docs/ruby/ubuntu/ 已經編譯好的套件
 
@@ -44,7 +43,7 @@ sudo make install
 		 
 
 
-		安裝 MySQL
+## 安裝 MySQL
 sudo apt-get install mysql-common mysql-client libmysqlclient-dev mysql-server
 		過程中會出現視窗提示你輸入 root 密碼
 sudo gem install mysql2 --no-ri --no-rdoc
@@ -56,7 +55,7 @@ CREATE DATABASE rails_exercise CHARACTER SET utf8;
 		執行完，輸入 exit 離開 mysql console，然後繼續以下步驟
 		若是之後用相同主機建立一個新專案，要再 create database
 
-		或安裝 PostgreSQL
+## 安裝 PostgreSQL
 		要用 MySQL 的話，就不需要裝 PostgreSQL 了
 sudo apt-get install postgresql libpq-dev postgresql-contrib
 		上述在 Ubuntu 12.04 只能裝到 PostgreSQL 9.3，如果要裝 9.4 請參考 http://www.postgresql.org/download/linux/ubuntu/ 
@@ -69,7 +68,7 @@ sudo gem install pg --no-ri --no-rdoc
 		papt-get install postgresql-9.4 postgresql-client-9.4 libpq-dev
 		 
 
-		安裝 Passenger 和 Nginx
+## 安裝 Passenger 和 Nginx
 sudo gem install bundler passenger --no-ri --no-rdoc
 sudo passenger-install-nginx-module
 		安裝Nginx透過Passenger去安裝，目的是讓你可以跑ruby
@@ -93,7 +92,7 @@ sudo /usr/sbin/update-rc.d -f nginx defaults 
 
 		瀏覽器打開 http://106.187.52.234應該可以看到 It works
 
-		設定 Deploy 使用者
+## 設定 Deploy 使用者
 		root帳號權限很大，我們不希望每個人都需要用到root權限，所以會開個deploy帳號
 		會放在home/deploy
 sudo adduser --disabled-password deploy
@@ -113,9 +112,9 @@ chown deploy:deploy /home/deploy/.ssh/authorized_keys
 
 		Linode ssh雲端主機設定到此暫時完成，接下來是本地code部分去設定
 
-		設定 Capistrano 腳本
+## 設定 Capistrano 腳本
 
-範例 code: https://github.com/ihower/rails-exercise-ac5/blob/master/config/deploy.rb
+範例 code: <https://github.com/ihower/rails-exercise-ac5/blob/master/config/deploy.rb>
 
 (本機) Gemfile 加入 
 		gem 'capistrano-rails', :group => :development
@@ -128,7 +127,7 @@ chown deploy:deploy /home/deploy/.ssh/authorized_keys
 		require 'capistrano/rails'
 		require 'capistrano/passenger'
 (本機) 編輯 config/deploy.rb 
-	◦	開頭加上一行 `ssh-add` # 注意是鍵盤左上角的「 `」不是單引號「 '」，need this to make key-forwarding work，參考 https://ihower.tw/blog/archives/7837
+	◦	開頭加上一行 \`ssh-add\` # 注意是鍵盤左上角的「 \`」不是單引號「 '」，need this to make key-forwarding work，參考 https://ihower.tw/blog/archives/7837
 	◦	set :application, 'rails-exercise'
 	◦	set :repo_url, 'git@github.com:ihower/rails-exercise.git'
 	◦	set :deploy_to, '/home/deploy/rails-exercise'
@@ -158,7 +157,7 @@ chown deploy:deploy /home/deploy/.ssh/authorized_keys
 		secrets.yml同樣做一次
 		若有其他 settings.yml 一樣要做，例如 email.yml、facebook.yml
 		 
-database.yml 範例，第一行本地是development:，要改成production:
+**database.yml 範例**
 
 		production:
 		  adapter: mysql2
@@ -168,14 +167,14 @@ database.yml 範例，第一行本地是development:，要改成production:
 		  username: root
 		  password: your_password
   
-  secrets.yml範例 (在本機用 rake secret 可以隨機產生一個新的 key)：
+**secrets.yml 範例 ( rake secret 產生一個新的 key)：**
   
 		production:
 		  secret_key_base: xxxxxxx........
 
 (本機) cap production deploy  (之後部署就用這個指令，接下來設定 Nginx)
 
-一些錯誤問題
+## 一些錯誤問題
 
 cap production deploy 執行中間出現很多 (failed) 是怎麼回事? 例如：
 		 [39417d64] Finished in 0.105 seconds with exit status 1 (failed).
@@ -201,7 +200,7 @@ lock '3.3.3'   改成    lock '>=3.3.3'
 解法: capistrano-passenger gem 需要 0.1.1 版本，並修改 config/deploy.rb 加上
 set :passenger_restart_with_touch, true
 
-		設定 Nginx 網頁伺服器
+## 設定 Nginx 網頁伺服器
 
 	•	編輯 /opt/nginx/conf/nginx.conf 
 
@@ -219,7 +218,7 @@ set :passenger_restart_with_touch, true
 		      include       mime.types;
 		      default_type  application/octet-stream;
 		    
-		      include    /opt/nginx/conf/vhost/*.conf;
+		      include    /opt/nginx/conf/vhost/\*.conf;
 		      client_max_body_size 100m;
 		       
 		      gzip                on;
@@ -253,10 +252,10 @@ set :passenger_restart_with_touch, true
 		    tcp_nodelay on;
 		        
 		    # .... 以下不用改  
- }
+    }
  
 	•	新增 /opt/nginx/conf/vhost/your_project_name.conf，一個 rails 專案搭配一個設定檔案：
-		這個檔名自由命名，副檔名是 .conf 即可
+這個檔名自由命名，副檔名是 .conf 即可
 		server {
 		      listen 80;
 		      server_name your_domain;
