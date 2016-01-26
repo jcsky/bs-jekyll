@@ -17,7 +17,6 @@ tags: [rails]
 `rails generate rspec:install`
 
 **simple_form**
-
 `rails generate simple_form:install`  install
 `rails generate simple_form:install --bootstrap`  theme
 
