@@ -13,7 +13,14 @@ tags: []
 ### group_by_day
 `events_count = Event.group_by_day(:created_at).count`
 
+### reduct, inject
+`[100, 200, 1000].reduce :+` # => 1300
 
+`[100, 200, 1000].reduce :*` # => 20000000
+
+`[100, 200, 1000].inject {|sum, n| sum + n }` #=> 1300
+
+# About SQL
 
 ### self join
 ```
@@ -36,3 +43,10 @@ end
 
 ### sort by calculated
 `scope :sort_by_pledged_percent, -> { select('*, (pledged / goal) as sort_value').order('sort_value DESC') }`
+
+
+### Updating multiple records:
+```
+people = { 1 => { "first_name" => "David" }, 2 => { "first_name" => "Jeremy" } }
+Person.update(people.keys, people.values)
+```
