@@ -8,6 +8,7 @@ tags: [rspec]
 {% include JB/setup %}
 
 In your spec_helper.rb:
+
 ```
 RSpec.configure do |config|
     config.filter_run focus: true
@@ -16,6 +17,7 @@ end
 ```
 
 and then on your specs:
+
 ```
 it 'can do so and so', focus: true do
     # This is the only test that will run
@@ -23,6 +25,7 @@ end
 ```
 
 You can also focus tests with 'fit' or exclude with 'xit', like so:
+
 ```
 fit 'can do so and so' do
     # This is the only test that will run
