@@ -7,7 +7,7 @@ tags: [rspec]
 ---
 {% include JB/setup %}
 
-In your spec_helper.rb:
+# In your spec_helper.rb:
 
 ```
 RSpec.configure do |config|
@@ -16,7 +16,7 @@ RSpec.configure do |config|
 end
 ```
 
-and then on your specs:
+## and then on your specs:
 
 ```
 it 'can do so and so', focus: true do
@@ -24,7 +24,7 @@ it 'can do so and so', focus: true do
 end
 ```
 
-You can also focus tests with 'fit' or exclude with 'xit', like so:
+### You can also focus tests with 'fit' or exclude with 'xit', like so:
 
 ```
 fit 'can do so and so' do
