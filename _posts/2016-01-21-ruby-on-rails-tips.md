@@ -50,3 +50,6 @@ end
 people = { 1 => { "first_name" => "David" }, 2 => { "first_name" => "Jeremy" } }
 Person.update(people.keys, people.values)
 ```
+
+# sample code
+[智付寶 pay2go by ihower](https://github.com/ihower/rails-exercise-ac7/pull/1)

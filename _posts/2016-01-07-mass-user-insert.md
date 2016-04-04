@@ -7,6 +7,8 @@ tags: [rails ruby sql]
 ---
 {% include JB/setup %}
 
+[Xdite rails massive data](http://blog.xdite.net/posts/2012/08/22/rails-with-massive-data)
+
 SolveIssue Sample
 
 ```
