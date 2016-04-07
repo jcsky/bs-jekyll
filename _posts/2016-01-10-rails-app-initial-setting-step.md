@@ -59,10 +59,15 @@ rails generate devise user
 config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
 ```
 
+### letter_opener
+
+config.action_mailer.delivery_method = :letter_opener
+
 ### rails_layout
 
-rails generate layout:install bootstrap3
+**rails generate layout:install bootstrap3**
 >>>
+```
 remove  app/assets/stylesheets/application.css
 create  app/assets/stylesheets/application.css.scss
 create  app/assets/stylesheets/1st_load_framework.css.scss
@@ -73,16 +78,32 @@ create  app/views/layouts/_messages.html.erb
 create  app/views/layouts/_navigation.html.erb
 create  app/views/layouts/_navigation_links.html.erb
 
-rails generate layout:devise bootstrap3
+**rails generate layout:devise bootstrap3**
 >>>
 force  app/views/devise/sessions/new.html.erb
 force  app/views/devise/passwords/new.html.erb
 force  app/views/devise/passwords/edit.html.erb
 force  app/views/devise/registrations/edit.html.erb
 
-rails generate layout:navigation
+**rails generate layout:navigation**
 >>>
 identical  app/views/layouts/_navigation_links.html.erb
    create  app/views/layouts/_nav_links_for_auth.html.erb
      gsub  app/views/layouts/_navigation.html.erb
    create  spec/features/visitors/navigation_spec.rb
+```
+
+### application.rb
+```
+config.time_zone = 'Asia/Taipei'
+config.i18n.default_locale = :"zh-TW"
+```
+
+### settingslogic
+create app/models/settings.rb
+```ruby
+class Settings < Settingslogic
+  source "#{Rails.root}/config/application.yml"
+  namespace Rails.env
+end
+```
